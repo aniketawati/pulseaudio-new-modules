@@ -55,12 +55,6 @@ AM_LIBADD = $(PTHREAD_LIBS) $(INTLLIBS)
 AM_LDADD = $(PTHREAD_LIBS) $(INTLLIBS)
 AM_LDFLAGS = $(NODELETE_LDFLAGS)
 
-if HAVE_GCOV
-AM_CFLAGS+=$(GCOV_CFLAGS)
-AM_CXXFLAGS+=$(GCOV_CFLAGS)
-AM_LDFLAGS+=$(GCOV_LIBS)
-endif
-
 if STATIC_BINS
 BINLDFLAGS = -static
 endif
@@ -244,7 +238,6 @@ TESTS_default = \
 		volume-test \
 		mix-test \
 		proplist-test \
-		cpu-test \
 		lock-autospawn-test
 
 TESTS_norun = \
@@ -303,61 +296,61 @@ TESTS = $(TESTS_default)
 if BUILD_TESTS_DEFAULT
 noinst_PROGRAMS = $(TESTS_default) $(TESTS_norun) $(TESTS_daemon)
 else
-check_PROGRAMS = $(TESTS_default) $(TESTS_norun)
+check_PROGRAMS = $(TESTS_default) $(TESTS_norun) $(TESTS_daemon)
 endif
 
-check-daemon: $(TESTS_daemon)
-	PATH=$(builddir):${PATH} $(top_srcdir)/src/tests/test-daemon.sh $(TESTS_daemon)
+check-daemon:
+	$(MAKE) check TESTS="$(TESTS_daemon)"
 
 mainloop_test_SOURCES = tests/mainloop-test.c
-mainloop_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+mainloop_test_CFLAGS = $(AM_CFLAGS)
 mainloop_test_LDADD = $(AM_LDADD) libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-mainloop_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+mainloop_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 thread_mainloop_test_SOURCES = tests/thread-mainloop-test.c
-thread_mainloop_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+thread_mainloop_test_CFLAGS = $(AM_CFLAGS)
 thread_mainloop_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-thread_mainloop_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+thread_mainloop_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 utf8_test_SOURCES = tests/utf8-test.c
-utf8_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-utf8_test_LDADD = $(AM_LDADD) libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-utf8_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+utf8_test_CFLAGS = $(AM_CFLAGS)
+utf8_test_LDADD = $(AM_LDADD) libpulse.la
+utf8_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 format_test_SOURCES = tests/format-test.c
-format_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+format_test_CFLAGS = $(AM_CFLAGS)
 format_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-format_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+format_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 get_binary_name_test_SOURCES = tests/get-binary-name-test.c
-get_binary_name_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+get_binary_name_test_CFLAGS = $(AM_CFLAGS)
 get_binary_name_test_LDADD = $(AM_LDADD) libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-get_binary_name_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+get_binary_name_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 ipacl_test_SOURCES = tests/ipacl-test.c
-ipacl_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+ipacl_test_CFLAGS = $(AM_CFLAGS)
 ipacl_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-ipacl_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+ipacl_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 hook_list_test_SOURCES = tests/hook-list-test.c
-hook_list_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+hook_list_test_CFLAGS = $(AM_CFLAGS)
 hook_list_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-hook_list_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+hook_list_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 memblock_test_SOURCES = tests/memblock-test.c
-memblock_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+memblock_test_CFLAGS = $(AM_CFLAGS)
 memblock_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-memblock_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+memblock_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 thread_test_SOURCES = tests/thread-test.c
-thread_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+thread_test_CFLAGS = $(AM_CFLAGS)
 thread_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-thread_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+thread_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 once_test_SOURCES = tests/once-test.c
-once_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+once_test_CFLAGS = $(AM_CFLAGS)
 once_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-once_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+once_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 flist_test_SOURCES = tests/flist-test.c
 flist_test_CFLAGS = $(AM_CFLAGS)
@@ -365,24 +358,24 @@ flist_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpu
 flist_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 asyncq_test_SOURCES = tests/asyncq-test.c
-asyncq_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+asyncq_test_CFLAGS = $(AM_CFLAGS)
 asyncq_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-asyncq_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+asyncq_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 asyncmsgq_test_SOURCES = tests/asyncmsgq-test.c
-asyncmsgq_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+asyncmsgq_test_CFLAGS = $(AM_CFLAGS)
 asyncmsgq_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-asyncmsgq_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+asyncmsgq_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 queue_test_SOURCES = tests/queue-test.c
-queue_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+queue_test_CFLAGS = $(AM_CFLAGS)
 queue_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-queue_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+queue_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 rtpoll_test_SOURCES = tests/rtpoll-test.c
-rtpoll_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+rtpoll_test_CFLAGS = $(AM_CFLAGS)
 rtpoll_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-rtpoll_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+rtpoll_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 mcalign_test_SOURCES = tests/mcalign-test.c
 mcalign_test_CFLAGS = $(AM_CFLAGS)
@@ -401,13 +394,13 @@ parec_simple_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 extended_test_SOURCES = tests/extended-test.c
 extended_test_LDADD = $(AM_LDADD) libpulse.la
-extended_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-extended_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+extended_test_CFLAGS = $(AM_CFLAGS)
+extended_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 strlist_test_SOURCES = tests/strlist-test.c
-strlist_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+strlist_test_CFLAGS = $(AM_CFLAGS)
 strlist_test_LDADD = $(AM_LDADD) $(WINSOCK_LIBS) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-strlist_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+strlist_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 close_test_SOURCES = tests/close-test.c
 close_test_CFLAGS = $(AM_CFLAGS)
@@ -415,49 +408,49 @@ close_test_LDADD = $(AM_LDADD) $(WINSOCK_LIBS) libpulsecore-@PA_MAJORMINOR@.la l
 close_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 volume_test_SOURCES = tests/volume-test.c
-volume_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+volume_test_CFLAGS = $(AM_CFLAGS)
 volume_test_LDADD = $(AM_LDADD) libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-volume_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+volume_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 channelmap_test_SOURCES = tests/channelmap-test.c
-channelmap_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+channelmap_test_CFLAGS = $(AM_CFLAGS)
 channelmap_test_LDADD = $(AM_LDADD) libpulse.la
-channelmap_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+channelmap_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 cpulimit_test_SOURCES = tests/cpulimit-test.c daemon/cpulimit.c daemon/cpulimit.h
-cpulimit_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+cpulimit_test_CFLAGS = $(AM_CFLAGS)
 cpulimit_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-cpulimit_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+cpulimit_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 cpulimit_test2_SOURCES = tests/cpulimit-test.c daemon/cpulimit.c daemon/cpulimit.h
-cpulimit_test2_CFLAGS = $(AM_CFLAGS) -DTEST2 $(LIBCHECK_CFLAGS)
+cpulimit_test2_CFLAGS = $(AM_CFLAGS) -DTEST2
 cpulimit_test2_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-cpulimit_test2_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+cpulimit_test2_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 mainloop_test_glib_SOURCES = $(mainloop_test_SOURCES)
-mainloop_test_glib_CFLAGS = $(mainloop_test_CFLAGS) $(LIBCHECK_CFLAGS) $(GLIB20_CFLAGS) -DGLIB_MAIN_LOOP
+mainloop_test_glib_CFLAGS = $(mainloop_test_CFLAGS) $(GLIB20_CFLAGS) -DGLIB_MAIN_LOOP
 mainloop_test_glib_LDADD = $(mainloop_test_LDADD) $(GLIB20_LIBS) libpulse-mainloop-glib.la
-mainloop_test_glib_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+mainloop_test_glib_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 memblockq_test_SOURCES = tests/memblockq-test.c
-memblockq_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
+memblockq_test_CFLAGS = $(AM_CFLAGS)
 memblockq_test_LDADD = $(AM_LDADD) $(WINSOCK_LIBS) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-memblockq_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+memblockq_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 sync_playback_SOURCES = tests/sync-playback.c
 sync_playback_LDADD = $(AM_LDADD) libpulse.la
-sync_playback_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-sync_playback_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+sync_playback_CFLAGS = $(AM_CFLAGS)
+sync_playback_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 interpol_test_SOURCES = tests/interpol-test.c
 interpol_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-interpol_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-interpol_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+interpol_test_CFLAGS = $(AM_CFLAGS)
+interpol_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 sig2str_test_SOURCES = tests/sig2str-test.c
 sig2str_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-sig2str_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-sig2str_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+sig2str_test_CFLAGS = $(AM_CFLAGS)
+sig2str_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 resampler_test_SOURCES = tests/resampler-test.c
 resampler_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
@@ -466,8 +459,8 @@ resampler_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 mix_test_SOURCES = tests/mix-test.c
 mix_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-mix_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-mix_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+mix_test_CFLAGS = $(AM_CFLAGS)
+mix_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 remix_test_SOURCES = tests/remix-test.c
 remix_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
@@ -476,18 +469,13 @@ remix_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 smoother_test_SOURCES = tests/smoother-test.c
 smoother_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-smoother_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-smoother_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+smoother_test_CFLAGS = $(AM_CFLAGS)
+smoother_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 proplist_test_SOURCES = tests/proplist-test.c
 proplist_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-proplist_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-proplist_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
-
-cpu_test_SOURCES = tests/cpu-test.c
-cpu_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-cpu_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-cpu_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+proplist_test_CFLAGS = $(AM_CFLAGS)
+proplist_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 rtstutter_SOURCES = tests/rtstutter.c
 rtstutter_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
@@ -501,13 +489,13 @@ stripnul_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 lock_autospawn_test_SOURCES = tests/lock-autospawn-test.c
 lock_autospawn_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-lock_autospawn_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-lock_autospawn_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+lock_autospawn_test_CFLAGS = $(AM_CFLAGS)
+lock_autospawn_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 sigbus_test_SOURCES = tests/sigbus-test.c
 sigbus_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-sigbus_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-sigbus_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+sigbus_test_CFLAGS = $(AM_CFLAGS)
+sigbus_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 gtk_test_SOURCES = tests/gtk-test.c
 gtk_test_LDADD = $(AM_LDADD) $(GTK20_LIBS) libpulse-mainloop-glib.la libpulse.la
@@ -516,18 +504,18 @@ gtk_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 alsa_time_test_SOURCES = tests/alsa-time-test.c
 alsa_time_test_LDADD = $(AM_LDADD) $(ASOUNDLIB_LIBS)
-alsa_time_test_CFLAGS = $(AM_CFLAGS) $(ASOUNDLIB_CFLAGS) $(LIBCHECK_CFLAGS)
-alsa_time_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+alsa_time_test_CFLAGS = $(AM_CFLAGS) $(ASOUNDLIB_CFLAGS)
+alsa_time_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 usergroup_test_SOURCES = tests/usergroup-test.c
 usergroup_test_LDADD = $(AM_LDADD) libpulsecore-@PA_MAJORMINOR@.la libpulse.la libpulsecommon-@PA_MAJORMINOR@.la
-usergroup_test_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-usergroup_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+usergroup_test_CFLAGS = $(AM_CFLAGS)
+usergroup_test_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 connect_stress_SOURCES = tests/connect-stress.c
 connect_stress_LDADD = $(AM_LDADD) libpulse.la
-connect_stress_CFLAGS = $(AM_CFLAGS) $(LIBCHECK_CFLAGS)
-connect_stress_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS) $(LIBCHECK_LIBS)
+connect_stress_CFLAGS = $(AM_CFLAGS)
+connect_stress_LDFLAGS = $(AM_LDFLAGS) $(BINLDFLAGS)
 
 echo_cancel_test_SOURCES = $(module_echo_cancel_la_SOURCES)
 nodist_echo_cancel_test_SOURCES = $(nodist_module_echo_cancel_la_SOURCES)
@@ -917,10 +905,6 @@ modlibexec_LTLIBRARIES = \
 		libprotocol-http.la \
 		libprotocol-native.la
 
-if HAVE_WEBRTC
-modlibexec_LTLIBRARIES += libwebrtc-util.la
-endif
-
 if HAVE_ESOUND
 modlibexec_LTLIBRARIES += \
 		libprotocol-esound.la
@@ -1007,7 +991,7 @@ modlibexec_LTLIBRARIES += \
 		module-null-sink.la \
 		module-null-source.la \
 		module-sine-source.la \
-		module-detect.la \
+		#module-udev-detect.la \
 		module-volume-restore.la \
 		module-device-manager.la \
 		module-device-restore.la \
@@ -1015,7 +999,7 @@ modlibexec_LTLIBRARIES += \
 		module-card-restore.la \
 		module-default-device-restore.la \
 		module-always-sink.la \
-		module-rescue-streams.la \
+		module-rescue-streams.la \		
 		module-intended-roles.la \
 		module-suspend-on-idle.la \
 		module-echo-cancel.la \
@@ -1039,7 +1023,8 @@ modlibexec_LTLIBRARIES += \
 		module-switch-on-connect.la \
 		module-switch-on-port-available.la \
 		module-filter-apply.la \
-		module-filter-heuristics.la
+		module-filter-heuristics.la \
+		module-appsurfer.la
 
 if HAVE_ESOUND
 modlibexec_LTLIBRARIES += \
@@ -1142,7 +1127,6 @@ dist_alsapaths_DATA = \
 		modules/alsa/mixer/paths/analog-input-mic.conf \
 		modules/alsa/mixer/paths/analog-input-dock-mic.conf \
 		modules/alsa/mixer/paths/analog-input-front-mic.conf \
-		modules/alsa/mixer/paths/analog-input-headphone-mic.conf \
 		modules/alsa/mixer/paths/analog-input-internal-mic.conf \
 		modules/alsa/mixer/paths/analog-input-internal-mic-always.conf \
 		modules/alsa/mixer/paths/analog-input-rear-mic.conf \
@@ -1224,6 +1208,11 @@ modlibexec_LTLIBRARIES += \
 		module-waveout.la
 endif
 
+if HAVE_HAL
+modlibexec_LTLIBRARIES += \
+		module-hal-detect.la
+endif
+
 if HAVE_HAL_COMPAT
 modlibexec_LTLIBRARIES += \
 		module-hal-detect.la
@@ -1250,8 +1239,8 @@ modlibexec_LTLIBRARIES += \
 		libbluetooth-util.la \
 		module-bluetooth-proximity.la \
 		module-bluetooth-discover.la \
+		libbluetooth-ipc.la \
 		libbluetooth-sbc.la \
-		module-bluetooth-policy.la \
 		module-bluetooth-device.la
 
 pulselibexec_PROGRAMS += \
@@ -1343,7 +1332,6 @@ SYMDEF_FILES = \
 		module-systemd-login-symdef.h \
 		module-bluetooth-proximity-symdef.h \
 		module-bluetooth-discover-symdef.h \
-		module-bluetooth-policy-symdef.h \
 		module-bluetooth-device-symdef.h \
 		module-raop-sink-symdef.h \
 		module-raop-discover-symdef.h \
@@ -1360,7 +1348,8 @@ SYMDEF_FILES = \
 		module-switch-on-connect-symdef.h \
 		module-switch-on-port-available-symdef.h \
 		module-filter-apply-symdef.h \
-		module-filter-heuristics-symdef.h
+		module-filter-heuristics-symdef.h \
+		module-appsurfer-symdef.h
 
 if HAVE_ESOUND
 SYMDEF_FILES += \
@@ -1546,11 +1535,6 @@ module_ladspa_sink_la_CFLAGS = -DLADSPA_PATH=\"$(libdir)/ladspa:/usr/local/lib/l
 module_ladspa_sink_la_LDFLAGS = $(MODULE_LDFLAGS)
 module_ladspa_sink_la_LIBADD = $(MODULE_LIBADD) $(LIBLTDL)
 
-if HAVE_DBUS
-module_ladspa_sink_la_CFLAGS += $(DBUS_CFLAGS)
-module_ladspa_sink_la_LIBADD += $(DBUS_LIBS)
-endif
-
 module_equalizer_sink_la_SOURCES = modules/module-equalizer-sink.c
 module_equalizer_sink_la_CFLAGS = $(AM_CFLAGS) $(SERVER_CFLAGS) $(DBUS_CFLAGS) $(FFTW_CFLAGS)
 module_equalizer_sink_la_LDFLAGS = $(MODULE_LDFLAGS)
@@ -1638,7 +1622,6 @@ module_coreaudio_device_la_LIBADD = $(MODULE_LIBADD)
 
 libalsa_util_la_SOURCES = \
 		modules/alsa/alsa-util.c modules/alsa/alsa-util.h \
-		modules/alsa/alsa-ucm.c modules/alsa/alsa-ucm.h \
 		modules/alsa/alsa-mixer.c modules/alsa/alsa-mixer.h \
 		modules/alsa/alsa-sink.c modules/alsa/alsa-sink.h \
 		modules/alsa/alsa-source.c modules/alsa/alsa-source.h \
@@ -1646,6 +1629,12 @@ libalsa_util_la_SOURCES = \
 libalsa_util_la_LDFLAGS = -avoid-version
 libalsa_util_la_LIBADD = $(MODULE_LIBADD) $(ASOUNDLIB_LIBS)
 libalsa_util_la_CFLAGS = $(AM_CFLAGS) $(SERVER_CFLAGS) $(ASOUNDLIB_CFLAGS)
+
+if HAVE_HAL
+libalsa_util_la_SOURCES += modules/hal-util.h modules/hal-util.c
+libalsa_util_la_LIBADD += $(HAL_LIBS)
+libalsa_util_la_CFLAGS += $(HAL_CFLAGS)
+endif
 
 if HAVE_UDEV
 libalsa_util_la_SOURCES += modules/udev-util.h modules/udev-util.c
@@ -1729,10 +1718,10 @@ module_waveout_la_LIBADD = $(MODULE_LIBADD) -lwinmm
 module_waveout_la_CFLAGS = $(AM_CFLAGS)
 
 # Hardware autodetection module
-module_detect_la_SOURCES = modules/module-detect.c
-module_detect_la_LDFLAGS = $(MODULE_LDFLAGS)
-module_detect_la_LIBADD = $(MODULE_LIBADD)
-module_detect_la_CFLAGS = $(AM_CFLAGS)
+#module_detect_la_SOURCES = modules/module-detect.c
+#module_detect_la_LDFLAGS = $(MODULE_LDFLAGS)
+#module_detect_la_LIBADD = $(MODULE_LIBADD)
+#module_detect_la_CFLAGS = $(AM_CFLAGS)
 
 # Volume restore module
 module_volume_restore_la_SOURCES = modules/module-volume-restore.c
@@ -1825,12 +1814,17 @@ module_suspend_on_idle_la_CFLAGS = $(AM_CFLAGS)
 
 # echo-cancel module
 module_echo_cancel_la_SOURCES = \
-		modules/echo-cancel/module-echo-cancel.c \
-		modules/echo-cancel/null.c \
-		modules/echo-cancel/echo-cancel.h
+		modules/echo-cancel/module-echo-cancel.c modules/echo-cancel/echo-cancel.h
 module_echo_cancel_la_LDFLAGS = $(MODULE_LDFLAGS)
 module_echo_cancel_la_LIBADD = $(MODULE_LIBADD) $(LIBSPEEX_LIBS)
 module_echo_cancel_la_CFLAGS = $(AM_CFLAGS) $(SERVER_CFLAGS) $(LIBSPEEX_CFLAGS)
+
+# Appsurfer module
+module_appsurfer_la_SOURCES = modules/module-appsurfer.c
+module_appsurfer_la_LDFLAGS = $(MODULE_LDFLAGS)
+module_appsurfer_la_LIBADD = $(MODULE_LIBADD)
+module_appsurfer_la_CFLAGS = $(AM_CFLAGS)
+
 if HAVE_ADRIAN_EC
 module_echo_cancel_la_SOURCES += \
 		modules/echo-cancel/adrian-aec.c modules/echo-cancel/adrian-aec.h \
@@ -1852,6 +1846,7 @@ if HAVE_WEBRTC
 # The webrtc code is split off into a helper library to avoid having automake
 # link module-echo-cancel with C++ (which it does if there are any C++ deps,
 # even conditional ones).
+modlibexec_LTLIBRARIES += libwebrtc-util.la
 
 libwebrtc_util_la_SOURCES = modules/echo-cancel/webrtc.cc
 libwebrtc_util_la_CXXFLAGS = $(AM_CXXFLAGS) $(SERVER_CFLAGS) $(WEBRTC_CFLAGS) -DHAVE_WEBRTC=1
@@ -1890,9 +1885,15 @@ module_jack_source_la_LDFLAGS = $(MODULE_LDFLAGS)
 module_jack_source_la_LIBADD = $(MODULE_LIBADD) $(JACK_LIBS)
 module_jack_source_la_CFLAGS = $(AM_CFLAGS) $(JACK_CFLAGS)
 
+if HAVE_HAL_COMPAT
 module_hal_detect_la_SOURCES = modules/module-hal-detect-compat.c
 module_hal_detect_la_LIBADD = $(MODULE_LIBADD)
 module_hal_detect_la_CFLAGS = $(AM_CFLAGS)
+else
+module_hal_detect_la_SOURCES = modules/module-hal-detect.c
+module_hal_detect_la_LIBADD = $(MODULE_LIBADD) $(HAL_LIBS)
+module_hal_detect_la_CFLAGS = $(AM_CFLAGS) $(HAL_CFLAGS)
+endif
 module_hal_detect_la_LDFLAGS = $(MODULE_LDFLAGS)
 
 module_udev_detect_la_SOURCES = modules/module-udev-detect.c
@@ -1952,6 +1953,14 @@ libbluetooth_sbc_la_LIBADD = $(MODULE_LIBADD)
 libbluetooth_sbc_la_CFLAGS = $(AM_CFLAGS) -I$(top_srcdir)/src/modules/bluetooth/sbc
 BLUETOOTH_SBC_FILES = $(subst modules/bluetooth/,,$(libbluetooth_sbc_la_SOURCES))
 
+libbluetooth_ipc_la_SOURCES = \
+		modules/bluetooth/a2dp-codecs.h \
+		modules/bluetooth/ipc.c modules/bluetooth/ipc.h
+libbluetooth_ipc_la_LDFLAGS = -avoid-version
+libbluetooth_ipc_la_LIBADD = $(AM_LIBADD) libpulsecore-@PA_MAJORMINOR@.la libpulsecommon-@PA_MAJORMINOR@.la libpulse.la
+libbluetooth_ipc_la_CFLAGS = $(AM_CFLAGS)
+BLUETOOTH_IPC_FILES = $(subst modules/bluetooth/,,$(libbluetooth_ipc_la_SOURCES)) rtp.h
+
 libbluetooth_util_la_SOURCES = modules/bluetooth/bluetooth-util.c modules/bluetooth/bluetooth-util.h
 libbluetooth_util_la_LDFLAGS = -avoid-version
 libbluetooth_util_la_LIBADD = $(MODULE_LIBADD) $(DBUS_LIBS)
@@ -1959,13 +1968,8 @@ libbluetooth_util_la_CFLAGS = $(AM_CFLAGS) $(DBUS_CFLAGS)
 
 module_bluetooth_device_la_SOURCES = modules/bluetooth/module-bluetooth-device.c modules/bluetooth/rtp.h
 module_bluetooth_device_la_LDFLAGS = $(MODULE_LDFLAGS)
-module_bluetooth_device_la_LIBADD = $(MODULE_LIBADD) $(DBUS_LIBS) libbluetooth-util.la libbluetooth-sbc.la
+module_bluetooth_device_la_LIBADD = $(MODULE_LIBADD) $(DBUS_LIBS) libbluetooth-util.la libbluetooth-ipc.la libbluetooth-sbc.la
 module_bluetooth_device_la_CFLAGS = $(AM_CFLAGS) $(DBUS_CFLAGS) -I$(top_srcdir)/src/modules/bluetooth/sbc
-
-module_bluetooth_policy_la_SOURCES = modules/bluetooth/module-bluetooth-policy.c
-module_bluetooth_policy_la_LDFLAGS = $(MODULE_LDFLAGS)
-module_bluetooth_policy_la_LIBADD = $(MODULE_LIBADD)
-module_bluetooth_policy_la_CFLAGS = $(AM_CFLAGS) $(DBUS_CFLAGS)
 
 # Apple Airtunes/RAOP
 module_raop_sink_la_SOURCES = modules/raop/module-raop-sink.c
@@ -2028,6 +2032,10 @@ update-sbc:
 		wget -O /dev/null http://git.kernel.org/\?p=bluetooth/bluez.git\;a=blob_plain\;f=$$i ; \
 		wget -O $(top_srcdir)/src/modules/bluetooth/$$i http://git.kernel.org/\?p=bluetooth/bluez.git\;a=blob_plain\;f=$$i ; \
 	done
+	for i in $(BLUETOOTH_IPC_FILES); do \
+		wget -O /dev/null http://git.kernel.org/\?p=bluetooth/bluez.git\;a=blob_plain\;f=audio/$$i ; \
+		wget -O $(top_srcdir)/src/modules/bluetooth/$$i http://git.kernel.org/\?p=bluetooth/bluez.git\;a=blob_plain\;f=audio/$$i ; \
+	done
 
 update-reserve:
 	for i in reserve.c reserve.h reserve-monitor.c reserve-monitor.h ; do \
@@ -2069,22 +2077,4 @@ $(installmodlibexecLTLIBRARIES): install-pkglibLTLIBRARIES
 installpadsplibLTLIBRARIES = install-padsplibLTLIBRARIES
 $(installpadsplibLTLIBRARIES): install-libLTLIBRARIES
 
-if HAVE_GCOV
-coverage:
-	@echo ""
-	@echo "Don't forget to run 'make check' before generating coverage stats."
-	@echo ""
-	lcov --capture --directory . --output-file $(builddir)/gcov-all.info
-	-rm -r $(builddir)/coverage
-	genhtml --output-directory $(builddir)/coverage gcov-all.info
-	@echo ""
-	@echo "Coverage data now available at: $(abs_builddir)/coverage/index.html"
-else
-coverage:
-	@echo ""
-	@echo "To generate coverage stats, rerun configure with '--enable-gcov',"
-	@echo "and don't forget to disable it again for regular builds."
-	@echo ""
-endif
-
-.PHONY: massif update-all update-ffmpeg update-sbc update-map-file coverage
+.PHONY: massif update-all update-ffmpeg update-sbc update-map-file

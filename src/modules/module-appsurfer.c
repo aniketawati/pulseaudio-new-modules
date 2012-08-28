@@ -33,7 +33,7 @@
 #include <pulsecore/namereg.h>
 #include <pulsecore/core-util.h>
 
-#include "module-rescue-streams-symdef.h"
+#include "module-appsurfer-symdef.h"
 
 PA_MODULE_AUTHOR("Lennart Poettering");
 PA_MODULE_DESCRIPTION("When a sink/source is removed, try to move their streams to the default sink/source");
@@ -56,9 +56,10 @@ static pa_hook_result_t new_sink_input_callback(pa_core *c, pa_sink_input *i, vo
     uint32_t idx;
     char *pid;
     char *module_name;
+    pa_sink *target;
     pa_module *null_sink;
     pa_assert(c);
-    pa_assert(sink);
+    pa_assert(i);
 
     /* There's no point in doing anything if the core is shut down anyway */
     if (c->state == PA_CORE_SHUTDOWN)
@@ -94,6 +95,7 @@ static pa_hook_result_t new_sink_input_callback(pa_core *c, pa_sink_input *i, vo
 }
 
 static pa_hook_result_t sink_input_move_fail_hook_callback(pa_core *c, pa_sink_input *i, void *userdata) {
+    uint32_t *idx;
     pa_sink *target;
     char *pid;
     pa_assert(c);
@@ -136,7 +138,7 @@ int pa__init(pa_module*m) {
     m->userdata = u = pa_xnew(struct userdata, 1);
 
     /* A little bit later than module-stream-restore, module-intended-roles... */
-    u->new_sink_input_slot = pa_hook_connect(&m->core->hooks[PA_CORE_HOOK_SINK_UNLINK], PA_HOOK_LATE+20, (pa_hook_cb_t) sink_unlink_hook_callback, u);
+    u->new_sink_input_slot = pa_hook_connect(&m->core->hooks[PA_CORE_HOOK_SINK_INPUT_NEW], PA_HOOK_EARLY, (pa_hook_cb_t) new_sink_input_callback, u);
 
     u->sink_input_move_fail_slot = pa_hook_connect(&m->core->hooks[PA_CORE_HOOK_SINK_INPUT_MOVE_FAIL], PA_HOOK_LATE+20, (pa_hook_cb_t) sink_input_move_fail_hook_callback, u);
 
